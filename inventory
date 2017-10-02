@@ -1,0 +1,17 @@
+[all]
+node1 ansible_host=10.50.10.10 ssh_port=22
+node2 ansible_host=10.50.10.12 ssh_port=22
+node3 ansible_host=10.50.10.13 ssh_port=22
+
+[management]
+node1 ansible_host=10.50.10.10 ssh_port=22
+
+[production]
+node2 ansible_host=10.50.10.12 ssh_port=22
+
+[preproduction]
+node3 ansible_host=10.50.10.13 ssh_port=22
+
+[db]
+node2 ansible_host=10.50.10.12 ssh_port=22
+node3 ansible_host=10.50.10.13 ssh_port=22

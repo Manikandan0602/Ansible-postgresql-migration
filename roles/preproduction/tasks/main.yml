@@ -1,0 +1,40 @@
+---
+- name: Ensure user for pre production has access to the database
+  become: true
+  become_user: postgres
+  postgresql_user: 
+    name: "{{ item }}"
+    login_user: postgres
+    password: "{{ item }}"
+    state: present
+  with_items:
+    - confluence-prp
+    - jira-prp
+    - crown-prp
+
+- name: Ensure databases for pre production are created
+  become: true
+  become_user: postgres
+  postgresql_db: 
+    name: "{{ item }}"
+    owner: "{{ item }}"
+    encoding: UTF-8
+    lc_collate: en_US.UTF-8
+    lc_ctype: en_US.UTF-8
+    state: present
+  with_items:
+    - confluence-prp
+    - jira-prp
+    - crown-prp
+
+- name: Ensure user does not have unnecessary privileges
+  become: true
+  become_user: postgres
+  postgresql_user: 
+    name: "{{ item }}"
+    role_attr_flags: NOSUPERUSER,NOCREATEDB
+    state: present
+  with_items: 
+    - confluence-prp
+    - jira-prp
+    - crown-prp

@@ -1,0 +1,38 @@
+---
+# Initial Setup of the boxes
+- hosts: all
+  become_user: sudo
+  remote_user: vagrant
+  vars_files:
+      - group_vars/all
+  roles:
+  - setup
+# Private key into the two nodes
+- hosts: management:preproduction
+  remote_user: vagrant
+  tasks:
+  - name: Copy my private key into the management node
+    copy:
+      src: "{{ my_private_key }}"
+      dest: ~/.ssh/id_rsa
+      owner: vagrant
+      group: vagrant
+      mode: 0600
+# Install Postgresql on the two database nodes
+- hosts: db
+  become: true
+  remote_user: vagrant
+  roles:
+    - postgresql
+# Create databases and users on production  
+- hosts: production
+  become: true
+  remote_user: vagrant
+  roles:
+    - production
+# Create databases and users on pre-production
+- hosts: preproduction
+  become: true
+  remote_user: vagrant
+  roles:
+    - preproduction

@@ -1,0 +1,20 @@
+---
+# Install essential tools to the boxes
+- name: Update the boxes
+  become: true
+  become_user: root
+  yum: name={{ item }} update_cache=true state=installed
+  with_items:
+    - epel-release
+    - net-tools
+    - bash
+    - openssl
+# Add the public key to every host
+- name: Append the id_rsa public key on authorized keys
+  copy:
+    src: "{{ my_public_key }}"
+    dest: ~/.ssh/authorized_keys
+    owner: vagrant
+    group: vagrant
+    mode: 0600
+    backup: yes 

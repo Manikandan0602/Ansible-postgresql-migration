@@ -1,0 +1,27 @@
+---
+# Install Postgres 
+- name: Install PostgreSQL
+  become: true
+  yum: name={{ item }} update_cache=true state=installed
+  with_items:
+    - postgresql
+    - postgresql-contrib
+    - postgresql-server
+    - python-psycopg2
+  notify: restart postgresql
+
+- name: check if /var/lib/pgsql/data is created
+  become: true
+  become_user: root
+  stat:
+    path: /var/lib/pgsql/data
+  register: direxist
+
+- name: Start Postgres if /var/lib/pgsql/data is absent
+  become: true
+  become_user: root
+  shell: postgresql-setup initdb
+  #when: direxist|failed
+
+- name: Ensure the PostgreSQL service is running
+  service: name=postgresql state=started enabled=yes
