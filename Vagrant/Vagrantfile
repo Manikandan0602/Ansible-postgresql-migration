@@ -1,0 +1,48 @@
+# -*- mode:ruby -*-
+#vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.define "node1" do |node1|
+    node1.vm.hostname="node1"
+    node1.vm.box="centos/7"
+    node1.vm.network :private_network, ip: "10.50.10.10"
+    node1.ssh.forward_agent= true
+    node1.ssh.insert_key= false
+    node1.ssh.private_key_path =  ["~/.vagrant.d/insecure_private_key","~/.ssh/id_rsa"]
+    node1.vm.provision :shell, privileged: false do |s|
+      ssh_pub_key = File.readlines("#{Dir.home}/.ssh/id_rsa.pub").first.strip
+      s.inline = <<-SHELL
+        echo #{ssh_pub_key} >> /home/$USER/.ssh/authorized_keys
+      SHELL
+    end
+  end
+  config.vm.define "node2" do |node2|
+    node2.vm.hostname="node2"
+    node2.vm.box="centos/7"
+    node2.vm.network :private_network, ip: "10.50.10.12"
+    node2.ssh.forward_agent= true
+    node2.ssh.insert_key= false
+    node2.ssh.private_key_path =  ["~/.vagrant.d/insecure_private_key","~/.ssh/id_rsa"]
+    node2.vm.provision :shell, privileged: false do |s|
+      ssh_pub_key = File.readlines("#{Dir.home}/.ssh/id_rsa.pub").first.strip
+      s.inline = <<-SHELL
+        echo #{ssh_pub_key} >> /home/$USER/.ssh/authorized_keys
+      SHELL
+    end
+  end
+  config.vm.define "node3" do |node3|
+    node3.vm.hostname="node3"
+    node3.vm.box="centos/7"
+    node3.vm.network :private_network, ip: "10.50.10.13"
+    node3.ssh.forward_agent= true
+    node3.ssh.insert_key= false
+    node3.ssh.private_key_path =  ["~/.vagrant.d/insecure_private_key","~/.ssh/id_rsa"]
+    node3.vm.provision :shell, privileged: false do |s|
+      ssh_pub_key = File.readlines("#{Dir.home}/.ssh/id_rsa.pub").first.strip
+      s.inline = <<-SHELL
+        echo #{ssh_pub_key} >> /home/$USER/.ssh/authorized_keys
+      SHELL
+    end
+  end
+end
+		
