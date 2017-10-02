@@ -1,1 +1,4 @@
 .DS_Store
+keys/id_rsa
+keys/id_rsa.pub
+site.retry
